@@ -125,6 +125,6 @@ POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
 . /usr/share/powerline/bindings/bash/powerline.sh
 
-. /home/rmc/z/z.sh
+. /home/$USER/z/z.sh
 
 alias ssh-workvm='ssh -A -t bristol ssh -A -t work ssh vm'
