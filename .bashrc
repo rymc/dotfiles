@@ -118,7 +118,7 @@ if ! shopt -oq posix; then
 fi
 
 alias gcal='gcalcli'
-alias gcal-qa="gcalcli --calendar 'ryaan91@googlemail.com' quick"
+alias gcal-qa="gcalcli --calendar 'ryan@ryanmcconville.com' quick"
 
 powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
