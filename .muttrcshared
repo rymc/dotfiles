@@ -1,0 +1,72 @@
+set sidebar_visible = yes
+set sidebar_width   = 15
+
+set date_format = "%m/%d"
+set index_format = "[%Z]  %D  %-20.20F  %s"
+set uncollapse_jump
+set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+
+set sort='reverse-date-received'
+set sort_aux=reverse-last-date-received
+
+auto_view text/html                                 
+alternative_order text/plain text/enriched text/html
+bind attach <return> view-mailcap
+
+bind index gg       first-entry
+bind index G        last-entry
+
+bind index R        group-reply
+bind index <tab>    sync-mailbox
+bind index <space>  collapse-thread
+
+
+macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
+
+
+bind index,pager <down>   sidebar-next
+bind index,pager <up>     sidebar-prev
+bind index,pager <right>  sidebar-open
+
+bind index p recall-message
+
+bind index J next-unread 
+
+set fast_reply
+set askcc  
+set include 
+set forward_quote
+set reply_to    
+
+set hostname="rmc"
+set hidden_host="yes"
+set realname="Ryan McConville"
+
+unset markers
+
+set editor="vim -c 'set spell spelllang=en'"
+
+set send_charset="utf-8"
+
+set delete
+unset confirmappend 
+set quit
+set mark_old=no
+set text_flowed
+set pager_stop
+set tilde
+set wrap=0
+
+
+macro attach O "<pipe-message>cat > /tmp/mutt.html; /usr/bin/open -a Google\ Chrome /tmp/mutt.html<enter>"
+
+set text_flowed       = yes
+set alias_file='~/.mutt/alias'
+set display_filter= '~/.mutt/aliases.sh'
+source $alias_file
+set mailcap_path = ~/.mutt/mailcap
+source ~/.mutt/dracula.muttrc
+macro index,pager \cb "<pipe-message> urlscan<Enter>" "call urlscan to extract URLs out of a message"
+macro attach,compose \cb "<pipe-entry> urlscan<Enter>" "call urlscan to extract URLs out of a message"
+
+set pgp_use_gpg_agent

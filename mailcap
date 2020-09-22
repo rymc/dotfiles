@@ -1,0 +1,8 @@
+text/html; w3m -I %{charset} -T text/html; copiousoutput;
+document/pdf; ~/.mutt/view_attachment %s -
+application/octet-stream; ~/.mutt/view_attachment %s -
+mime_lookup application/octet-stream
+video/*; ~/.mutt/view_attachment %s -
+image/*; ~/.mutt/view_attachment %s -
+application/*; ~/.mutt/view_attachment %s -
+text/html; ~/.mutt/view_attachment %s html
