@@ -16,10 +16,16 @@ if [ -n "${PNPM_HOME:-}" ]; then
 fi
 
 # Common PATH additions
-PATH="$HOME/.local/bin:$PATH"
-PATH="$PATH:$HOME/.lmstudio/bin"
-PATH="$PATH:$HOME/.codeium/windsurf/bin"
-PATH="$PATH:$HOME/.antigravity/antigravity/bin"
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) PATH="$HOME/.local/bin:$PATH" ;; esac
+if [ -d "$HOME/.lmstudio/bin" ]; then
+  PATH="$PATH:$HOME/.lmstudio/bin"
+fi
+if [ -d "$HOME/.codeium/windsurf/bin" ]; then
+  PATH="$PATH:$HOME/.codeium/windsurf/bin"
+fi
+if [ -d "$HOME/.antigravity/antigravity/bin" ]; then
+  PATH="$PATH:$HOME/.antigravity/antigravity/bin"
+fi
 
 # Cargo (adds ~/.cargo/bin to PATH if installed)
 if [ -f "$HOME/.cargo/env" ]; then

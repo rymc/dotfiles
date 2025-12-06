@@ -1,1 +1,1 @@
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+# Keep .zshenv minimal; cargo/env is sourced from shell/common.sh

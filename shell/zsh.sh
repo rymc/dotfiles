@@ -65,6 +65,8 @@ setopt hist_ignore_dups
 setopt hist_verify
 setopt appendhistory
 setopt incappendhistory
+setopt hist_ignore_all_dups
+setopt hist_reduce_blanks
 
 # Misc options
 setopt autocd
@@ -92,12 +94,21 @@ if [[ -o interactive && -t 0 ]]; then
 fi
 
 # Google Cloud SDK
-if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then
-  . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"
-fi
-if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then
-  . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"
-fi
+_gcloud_path_candidates=(
+  "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"
+  "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"
+  /usr/lib/google-cloud-sdk/path.zsh.inc
+  /usr/lib/google-cloud-sdk/completion.zsh.inc
+  /snap/google-cloud-sdk/current/path.zsh.inc
+  /snap/google-cloud-sdk/current/completion.zsh.inc
+)
+for _gcloud_file in "${_gcloud_path_candidates[@]}"; do
+  case "$_gcloud_file" in
+    *path.zsh.inc) [ -f "$_gcloud_file" ] && . "$_gcloud_file" ;;
+    *completion.zsh.inc) [ -f "$_gcloud_file" ] && . "$_gcloud_file" ;;
+  esac
+done
+unset _gcloud_path_candidates _gcloud_file
 
 # Nebius CLI
 if [ -f "$HOME/.nebius/path.zsh.inc" ]; then
