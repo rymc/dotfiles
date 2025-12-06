@@ -1,0 +1,32 @@
+auto-reload yes
+refresh-on-startup no
+reload-threads 2
+reload-time 60
+feedlist-format "%S%n %11u %t"
+articlelist-format "%D %f %?T?|%-17T| ?%t"
+datetime-format %d-%m-%y
+show-read-feeds no
+mark-as-read-on-hover yes 
+save-path "~/saved-articles/"
+player "mpv"
+
+ignore-article "*" "title =~ \"Sponsor\""
+ignore-article "*" "title =~ \"Advertisement\""
+ignore-mode "display"
+
+color background   color229   default
+color listnormal   color229   default
+color listfocus    color229   color61 bold
+color info         color247   color235
+color article      color229   default
+highlight article "^(Feed|Link):.*$" color46 default bold
+highlight article "^(Title|Date|Author):.*$" color39 default bold
+highlight article "https?://[^ ]+" color46 default underline
+highlight article "\\[[0-9]+\\]" color63 default bold
+highlight article "\\[image\\ [0-9]+\\]" color63 default bold
+highlight feedlist "^─.*$" color61 color235 bold
+
+bind-key k up
+bind-key j down
+
+browser  "firefox %u 2> /dev/null > /dev/null"

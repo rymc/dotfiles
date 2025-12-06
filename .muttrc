@@ -1,0 +1,39 @@
+set from = "ryan.mcconville@bristol.ac.uk"
+set realname = "Ryan McConville"
+
+
+set folder = "$HOME/Mail/bristol"
+set spoolfile = '+INBOX'
+set postponed ='+Drafts'
+set record = "+SentM"
+set trash = "+Deleted Items"
+
+set ssl_use_sslv3=yes
+set ssl_starttls=yes
+set ssl_force_tls = yes
+
+
+set header_cache = $HOME/.mutt/cache/headers
+set message_cachedir =$HOME/.mutt/cache/bodies
+set certificate_file = $HOME/.mutt/certificates
+
+set smtp_url = "smtp://rm17770@bristol.ac.uk@smtp.office365.com:587"
+set smtp_pass = "PASSWORD"
+
+set smtp_authenticators='login'
+set move = no 
+
+#bind index G imap-fetch-mail
+
+
+mailboxes + =INBOX \
+            =Drafts \
+            =Sent \
+            ="Sent Items"\
+			=temporary/search \
+
+
+source .muttrcshared
+
+macro index S "<enter-command>unset wait_key<enter><shell-escape>mutt-notmuch-py /Users/rm17770/Mail/Bristol/temporary/search<enter><change-folder-readonly>+temporary/search<enter>" "search mail (using notmuch)"
+
