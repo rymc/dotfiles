@@ -125,22 +125,18 @@ if [[ -n "$SSH_CONNECTION" ]]; then
   PROMPT='(SSH) '$PROMPT
 fi
 
-# Lazy-load NVM for performance
+# NVM (init eagerly so node is always on PATH)
 export NVM_DIR="$HOME/.nvm"
-nvm() {
-  unset -f nvm node npm npx
-  if [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
-    . "/opt/homebrew/opt/nvm/nvm.sh"
-  elif [ -s "$NVM_DIR/nvm.sh" ]; then
-    . "$NVM_DIR/nvm.sh"
-  fi
-  if [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ]; then
-    . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-  elif [ -s "$NVM_DIR/bash_completion" ]; then
-    . "$NVM_DIR/bash_completion"
-  fi
-  nvm "$@"
-}
-node() { nvm --version >/dev/null 2>&1; unset -f node; node "$@"; }
-npm() { nvm --version >/dev/null 2>&1; unset -f npm; npm "$@"; }
-npx() { nvm --version >/dev/null 2>&1; unset -f npx; npx "$@"; }
+if [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
+  . "/opt/homebrew/opt/nvm/nvm.sh"
+elif [ -s "$NVM_DIR/nvm.sh" ]; then
+  . "$NVM_DIR/nvm.sh"
+fi
+if [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ]; then
+  . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+elif [ -s "$NVM_DIR/bash_completion" ]; then
+  . "$NVM_DIR/bash_completion"
+fi
+if [ -d "$NVM_DIR/versions/node/v22.18.0/bin" ]; then
+  PATH="$NVM_DIR/versions/node/v22.18.0/bin:$PATH"
+fi
