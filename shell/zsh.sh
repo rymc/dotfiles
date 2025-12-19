@@ -10,6 +10,78 @@ else
   compinit -C
 fi
 
+# eza wrapper so common `ls` flags (e.g. `-lahtr`) work
+unalias ls 2>/dev/null
+unalias la 2>/dev/null
+unalias lt 2>/dev/null
+if command -v eza >/dev/null 2>&1; then
+  ls() {
+    emulate -L zsh
+
+    local -a eza_args before after
+    local want_time_sort=0 want_reverse=0
+    local saw_ddash=0
+
+    eza_args=(--icons --group-directories-first --long)
+    before=()
+    after=()
+
+    local arg
+    for arg in "$@"; do
+      if (( saw_ddash )); then
+        after+=("$arg")
+        continue
+      fi
+      if [[ "$arg" == "--" ]]; then
+        saw_ddash=1
+        continue
+      fi
+
+      # Translate common combined short flags from BSD/GNU `ls` to `eza`.
+      # Notably: `-t` (sort by mtime) and `-h` (human sizes) mean something
+      # different in eza, so strip them and re-add the right eza options.
+      if [[ "$arg" == -[!-]* && "$arg" != "--"* ]]; then
+        local flags="${arg#-}"
+        local kept=""
+        local i ch
+        for (( i = 1; i <= ${#flags}; i++ )); do
+          ch="${flags[i]}"
+          case "$ch" in
+            t) want_time_sort=1 ;;
+            r) want_reverse=1 ;;
+            h) ;; # eza `-h` is header; sizes are human-readable by default
+            *) kept+="$ch" ;;
+          esac
+        done
+        [[ -n "$kept" ]] && before+=("-$kept")
+        continue
+      fi
+
+      before+=("$arg")
+    done
+
+    if (( want_time_sort )); then
+      # `ls -t` sorts newest-first; `eza --sort=time` sorts oldest-first.
+      if (( want_reverse )); then
+        eza_args+=(--sort=time)    # `ls -tr` => oldest-first
+      else
+        eza_args+=(--sort=oldest)  # `ls -t`  => newest-first
+      fi
+    elif (( want_reverse )); then
+      eza_args+=(--reverse)
+    fi
+
+    if (( saw_ddash )); then
+      command eza "${eza_args[@]}" "${before[@]}" -- "${after[@]}"
+    else
+      command eza "${eza_args[@]}" "${before[@]}"
+    fi
+  }
+
+  la() { ls -a "$@"; }
+  lt() { command eza --icons --tree --level=2 "$@"; }
+fi
+
 # Syntax highlighting
 _zsh_highlighting_candidates=(
   /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
